@@ -1,0 +1,10 @@
+#!/bin/bash
+# harbor-svc <name> <command...>: run one Harbor process with exactly the environment that
+# harbor-entrypoint.sh wrote for it (/tmp/harbor-run/<name>.env), nothing inherited.
+set -euo pipefail
+f="/tmp/harbor-run/$1.env"
+shift
+set -a
+. "$f"
+set +a
+exec "$@"

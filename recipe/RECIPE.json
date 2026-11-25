@@ -1,0 +1,331 @@
+{
+ "schema": "readystack.recipe.v1",
+ "slug": "harbor",
+ "tag": "v2.16.0-CE-ubuntu24.04-r1",
+ "tarball": "ReadyStack-harbor-v2.16.0-CE-ubuntu24.04-r1.tar.gz",
+ "tarball_sha256": "14287f1b155bad64b8368934486e318bf042458a393e383a7b25f6a7f460ca66",
+ "kit_root": "v2.16.0-CE-ubuntu24.04-r1",
+ "generated_at": "2026-11-22T19:35:57Z",
+ "generator": "KitForge release/recipe_publish.py",
+ "dockerfile": "Dockerfile.offline.pinned",
+ "build_script": "BUILD_OFFLINE.sh",
+ "preview_lines": 24,
+ "pins": {
+  "upstream": {
+   "repo": "https://github.com/goharbor/harbor",
+   "ref": "v2.16.0",
+   "commit": "e69b1bfab9c945cdbddf74d04d19200011108af0",
+   "url": "https://github.com/goharbor/harbor/tree/e69b1bfab9c945cdbddf74d04d19200011108af0",
+   "from": "docs/provenance/BUILD_RECIPE.json"
+  },
+  "fetches": [
+   {
+    "kind": "git",
+    "url": "https://github.com/goharbor/harbor",
+    "ref": "v2.16.0"
+   },
+   {
+    "kind": "git",
+    "url": "https://github.com/goharbor/distribution.git",
+    "ref": "v2.8.3-harbor.3"
+   },
+   {
+    "kind": "http",
+    "url": "https://nodejs.org/dist/v22.23.5/node-v22.23.5-linux-x64.tar.gz"
+   }
+  ],
+  "bases": [
+   {
+    "ref": "golang:1.27.4-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea",
+    "image": "golang:1.27.4-bookworm",
+    "digest": "sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea"
+   },
+   {
+    "ref": "ubuntu:24.04@sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289",
+    "image": "ubuntu:24.04",
+    "digest": "sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289"
+   }
+  ],
+  "toolchain": {
+   "buildkit": "moby/buildkit:v0.31.2",
+   "buildkit_image_digest": "sha256:e0e67ea9c4bb07bdef683e29f70f3b623d1eb9c82274a9ec04e6bb0511449fb0",
+   "builder_images": [
+    "golang:1.27.4-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea"
+   ]
+  },
+  "build_method": "source-rebuild-go",
+  "source_date_epoch": 1794989415,
+  "source_date_epoch_utc": "2026-11-18T08:10:15Z",
+  "target": {
+   "image_manifest_digest": "sha256:b5147d42aaaf6036e8de3cd25960fbee87eab90069c9dbc869c3a16b35592d19",
+   "config_digest": "sha256:d1e0122a5a6bd7ff6020c08eb9f85006cf32fd87b0b7ec2c1426aff3b7af023d",
+   "image": "readystack/harbor:v2.16.0-CE-ubuntu24.04-r1"
+  },
+  "checksummed_files": 18209
+ },
+ "files": [
+  {
+   "path": "BASES.tsv",
+   "size": 262,
+   "sha256": "ce011151a1645dd3a27fa69b69817c72f341d5bc270492275eda163dbe6a7f7e",
+   "lines": 2,
+   "public": "full"
+  },
+  {
+   "path": "BUILD_OFFLINE.sh",
+   "size": 8856,
+   "sha256": "6ab4f08a6ec775b32d854f03413b30ecfe555ddba78cf0de956235f5a2a39542",
+   "lines": 162,
+   "public": "preview",
+   "preview_lines": 24
+  },
+  {
+   "path": "CHECKSUMS.sha256",
+   "size": 2740346,
+   "sha256": "e87a995d74124448cc41a682ecfc5a9a40e60a48bc0f07b785e28c7cc9d42b1f",
+   "lines": 18209,
+   "public": "account",
+   "stored": "gzip"
+  },
+  {
+   "path": "DOCKERFILE_NAME.txt",
+   "size": 26,
+   "sha256": "9aadd1ede68e016a6f163c97befc5ff2fcdc8ebd4f84b108dba63cb195fa8c84",
+   "lines": 1,
+   "public": "full"
+  },
+  {
+   "path": "Dockerfile",
+   "size": 6354,
+   "sha256": "8779ac4d84d4d5e2a02507795698c50c07d9eeaa6f89a986cf9b9da197d7ff70",
+   "lines": 71,
+   "public": "account"
+  },
+  {
+   "path": "Dockerfile.offline",
+   "size": 6354,
+   "sha256": "8779ac4d84d4d5e2a02507795698c50c07d9eeaa6f89a986cf9b9da197d7ff70",
+   "lines": 71,
+   "public": "account"
+  },
+  {
+   "path": "Dockerfile.offline.pinned",
+   "size": 6354,
+   "sha256": "8779ac4d84d4d5e2a02507795698c50c07d9eeaa6f89a986cf9b9da197d7ff70",
+   "lines": 71,
+   "public": "preview",
+   "preview_lines": 24
+  },
+  {
+   "path": "Dockerfile.vendor",
+   "size": 4823,
+   "sha256": "42ba0d58a0c10bd7591325bcad1c809f991df6110bd7b1e0dbb9298fc1911e8f",
+   "lines": 32,
+   "public": "account"
+  },
+  {
+   "path": "FILE_MODES.tsv",
+   "size": 1831864,
+   "sha256": "c17b5273725e33239d59f35abb4511d9d15ce38780d14547ca9e8a58baede105",
+   "lines": 21918,
+   "public": "account",
+   "stored": "gzip"
+  },
+  {
+   "path": "MANIFEST.txt",
+   "size": 1502164,
+   "sha256": "a0aab5ecdae59da6e8a53809ff70176b9b9596bf213df1a4d081b9995d0422e7",
+   "lines": 18211,
+   "public": "account",
+   "stored": "gzip"
+  },
+  {
+   "path": "README.md",
+   "size": 3291,
+   "sha256": "828c0982899d1caa48fc58062e8dcc375a849525913459a363f86628a903fbff",
+   "lines": 39,
+   "public": "account"
+  },
+  {
+   "path": "SOURCE_DATE_EPOCH.txt",
+   "size": 11,
+   "sha256": "ef357711bab595c36007f63759596968fa4dbc50991adfda151efb4df134ee7f",
+   "lines": 1,
+   "public": "full"
+  },
+  {
+   "path": "TARGET_DIGEST.txt",
+   "size": 442,
+   "sha256": "597a6f8ddb78248a9f351cbb6a8e787626e8849c674e55ee01568d8003aaa1e8",
+   "lines": 8,
+   "public": "full"
+  },
+  {
+   "path": "VERIFY_OFFLINE.sh",
+   "size": 10153,
+   "sha256": "3e8184ea230cfd8f41f977e26be6bf7bd03112c396c517837ce0c7de4f7399dd",
+   "lines": 165,
+   "public": "account"
+  },
+  {
+   "path": "core-app.conf",
+   "size": 74,
+   "sha256": "29c0eda6ce6930a4159a3b43bbb8349dda51629cc7412fb0087baed0719b1050",
+   "lines": 6,
+   "public": "account"
+  },
+  {
+   "path": "docs/PROVENANCE.md",
+   "size": 2625,
+   "sha256": "f3c48f2be3e20bc12cf7732214ae5131e33bf9bad9a21b85fe19811af3ff9173",
+   "lines": 36,
+   "public": "account"
+  },
+  {
+   "path": "docs/REBUILD.md",
+   "size": 6130,
+   "sha256": "38594b6b41ac9b1ade71aa29f2358ee98d55ba83d8407627148ebf9c47227d22",
+   "lines": 62,
+   "public": "account"
+  },
+  {
+   "path": "docs/VERIFY.md",
+   "size": 2027,
+   "sha256": "64cf1f933fb71ca31b989706a4fe0c657ecd09775a61a85381f7b4abbf9601ab",
+   "lines": 34,
+   "public": "account"
+  },
+  {
+   "path": "docs/provenance/BASE_IMAGE_DIGESTS.lock",
+   "size": 71,
+   "sha256": "14310f5ef84b9623f5c2eb586aeb6abff621cee563407d4856daabf77e2f6228",
+   "lines": 2,
+   "public": "full"
+  },
+  {
+   "path": "docs/provenance/BUILD_RECIPE.json",
+   "size": 6868,
+   "sha256": "223094c1f63262d615a1b903aa192a47011959a8d137136699ca88336c799c16",
+   "lines": 91,
+   "public": "account"
+  },
+  {
+   "path": "docs/provenance/CUSTODY_INPUTS.json",
+   "size": 647,
+   "sha256": "3b4d341503cc6acc07997523b625a1faa7c0a63af99aa1d6b0597fca07cccceb",
+   "lines": 17,
+   "public": "account"
+  },
+  {
+   "path": "docs/provenance/SOURCE_FILE_MANIFEST.json",
+   "size": 197462,
+   "sha256": "9bf25c5590358f05fd0ccef7b63430eed4ea77e1580d7e73233b18867f92042c",
+   "lines": 3318,
+   "public": "account"
+  },
+  {
+   "path": "docs/provenance/SOURCE_TREE_HASH.json",
+   "size": 305,
+   "sha256": "4e0106735aecbd39b2cf4b3022437b58d5aed1d8b667dc663d057e793d917058",
+   "lines": 9,
+   "public": "full"
+  },
+  {
+   "path": "docs/provenance/SYSTEM_PINNING.lock",
+   "size": 67,
+   "sha256": "d0b7c9e605cc3cb74bfe2a4e362d7c3ba7530ec4d2ff922e4afb1c77418de7a1",
+   "lines": 7,
+   "public": "account"
+  },
+  {
+   "path": "docs/provenance/TOOLCHAIN.lock",
+   "size": 7449,
+   "sha256": "1a8158895cde5c6ce71ed416195d148910e8af8f34e323752ad7a904adf10968",
+   "lines": 174,
+   "public": "account"
+  },
+  {
+   "path": "harbor-entrypoint.sh",
+   "size": 7167,
+   "sha256": "d8231c9145d1bbd7bb7ed55fdc26aa2259e378faaa87cd3c1f8bab4b2a056fb1",
+   "lines": 101,
+   "public": "account"
+  },
+  {
+   "path": "harbor-svc",
+   "size": 270,
+   "sha256": "a4990721682c19bd893c87b8f93c0f11fc871d16d0cfe7abecdc15fbf9284c0d",
+   "lines": 10,
+   "public": "account"
+  },
+  {
+   "path": "jobservice-config.yml",
+   "size": 766,
+   "sha256": "8f3b6b1d4624f1a272ab9bbd55be43ba19630fa3b9d9435f60a2463dd9177122",
+   "lines": 29,
+   "public": "account"
+  },
+  {
+   "path": "nginx.conf",
+   "size": 3546,
+   "sha256": "e11fbaf354d49959a1cb06d195b36c7d8ab2fbe0e8fbc46382b1c382371af332",
+   "lines": 117,
+   "public": "account"
+  },
+  {
+   "path": "rebuild.json",
+   "size": 1499,
+   "sha256": "d9e5d6270abf2d481c4539d6c58bab82cb351229d69adf85f0322de960315747",
+   "lines": 36,
+   "public": "account"
+  },
+  {
+   "path": "registry-config.yml",
+   "size": 1016,
+   "sha256": "1ca8c61d7346109f0d0233d5c42982d99482b9d64ec3e9d796ace284df5b08d1",
+   "lines": 45,
+   "public": "account"
+  },
+  {
+   "path": "registryctl-config.yml",
+   "size": 95,
+   "sha256": "cf61e144c9bc571bda4f01fde880fd119015165b71bcec3b4ccdbb7b35080dd7",
+   "lines": 4,
+   "public": "account"
+  },
+  {
+   "path": "supervisord.conf",
+   "size": 1869,
+   "sha256": "517eda275d15f413cafd9715dc98f9885c78b060503b2ad050f3bcdd1c048355",
+   "lines": 63,
+   "public": "account"
+  },
+  {
+   "path": "toolchain/BUILDKIT_TAG.txt",
+   "size": 22,
+   "sha256": "fcd530eeb02b063d2f047adad6eef896422a8e8d558513e5f09b2a262be32573",
+   "lines": 1,
+   "public": "full"
+  }
+ ],
+ "skipped": [],
+ "kit_adds": {
+  "bases": {
+   "files": 16,
+   "bytes": 330489911
+  },
+  "docs": {
+   "files": 3376,
+   "bytes": 24886076
+  },
+  "toolchain": {
+   "files": 1,
+   "bytes": 111529472
+  },
+  "vendored": {
+   "files": 14784,
+   "bytes": 381003214
+  }
+ },
+ "redacted_files": 0
+}

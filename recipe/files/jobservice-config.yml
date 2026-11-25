@@ -1,0 +1,29 @@
+# ReadyStack Harbor: upstream's jobservice config (templates/jobservice/config.yml.jinja, harbor.yml defaults).
+# port and the Redis URL are set per start through JOB_SERVICE_PORT / JOB_SERVICE_POOL_REDIS_URL.
+protocol: "http"
+port: 8082
+worker_pool:
+  workers: 10
+  backend: "redis"
+  redis_pool:
+    redis_url: "redis://127.0.0.1:6379/2"
+    namespace: "harbor_job_service_namespace"
+    idle_timeout_second: 3600
+job_loggers:
+  - name: "STD_OUTPUT"
+    level: "INFO"
+  - name: "FILE"
+    level: "INFO"
+    settings:
+      base_dir: "/data/job_logs"
+    sweeper:
+      duration: 1
+      settings:
+        work_dir: "/data/job_logs"
+loggers:
+  - name: "STD_OUTPUT"
+    level: "INFO"
+reaper:
+  max_update_hours: 24
+  max_dangling_hours: 168
+max_retrieve_size_mb: 10

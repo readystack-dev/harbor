@@ -1,0 +1,91 @@
+{
+  "schema": "kitforge.build_recipe.v1",
+  "slug": "harbor",
+  "image": "readystack/harbor:v2.16.0-CE-ubuntu24.04-r1",
+  "build_method": "source-rebuild-go",
+  "source": {
+    "repo": "https://github.com/goharbor/harbor",
+    "ref": "v2.16.0",
+    "commit": "e69b1bfab9c945cdbddf74d04d19200011108af0",
+    "source_date_epoch": 1794989415,
+    "source_date_epoch_provenance": "the time release v2.16.0-CE-ubuntu24.04-r1 was cut (2026-11-18T08:10:15Z), by scripts/retarget.py: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit e69b1bfab9c9, dated 2026-11-10T09:35:30Z (source.commit_epoch).",
+    "builder_image": "golang:1.27.4-bookworm",
+    "go_version_required": "1.27.3",
+    "multi_module": true,
+    "_version_note": "v2.16.0 (2026-11-10, commit e69b1bfab9c9). src/go.mod says `go 1.27.3` with no toolchain line; Harbor's Makefile builds with GOBUILDIMAGE=golang:1.27.3. We build on golang:1.27.4-bookworm (newest 1.27 patch) with GOTOOLCHAIN=local. Chain 1112 (2026-11-18) kept the 2.15.4-era builder golang:1.26.11, which cannot satisfy `go 1.27.3`: `go mod tidy -e && go mod vendor` in the vendor stage exited 1 (assemble_kit).",
+    "vendor_build": {
+      "tooling": [
+        "nodejs"
+      ],
+      "node_version": "22",
+      "cmds": [
+        "export NODE_OPTIONS=--max_old_space_size=4096",
+        "go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1",
+        "swagger generate server --template-dir=tools/swagger/templates --exclude-main --additional-initialism=CVE --additional-initialism=GC --additional-initialism=OIDC -f api/v2.0/swagger.yaml -A harbor --target src/server/v2.0",
+        "cd src/portal && npm ci --unsafe-perm --ignore-scripts --no-optional --no-audit --no-fund --loglevel=error && npm run postinstall && npm run generate-build-timestamp && node --max_old_space_size=4096 node_modules/@angular/cli/bin/ng build --configuration production && node -e 'const y=require(\"js-yaml\"),f=require(\"fs\");f.writeFileSync(\"dist/swagger.json\",JSON.stringify(y.load(f.readFileSync(\"../../api/v2.0/swagger.yaml\",\"utf8\"))))' && cd app-swagger-ui && npm ci --unsafe-perm --no-optional --no-audit --no-fund --loglevel=error && npm run build && cd /src",
+        "mkdir -p readystack-portal && cp -a src/portal/dist/. readystack-portal/ && cp -a src/portal/app-swagger-ui/dist/. readystack-portal/ && cp LICENSE readystack-portal/LICENSE",
+        "test -f readystack-portal/index.html && test -f readystack-portal/swagger-ui-index.html && test -f readystack-portal/swagger.json || (echo 'PORTAL BUILD FAILED: readystack-portal is incomplete' && exit 1)",
+        "rm -rf src/portal/node_modules src/portal/app-swagger-ui/node_modules src/portal/dist src/portal/app-swagger-ui/dist",
+        "git clone --depth 1 --branch v2.8.3-harbor.3 -q https://github.com/goharbor/distribution.git third_party/distribution && test \"$(git -C third_party/distribution rev-parse HEAD)\" = 72e8fdc1ff9021b77e618568a967e4b53689ce32 && rm -rf third_party/distribution/.git"
+      ],
+      "_note": "Runs ONLINE in the vendor stage, before go mod vendor, so its outputs are part of the vendored tree the offline stage rebuilds from. (1) go-swagger v0.33.1 generates src/server/v2.0/{models,restapi} from api/v2.0/swagger.yaml with Harbor's templates - the exact `make gen_apis` command; those packages are NOT committed and core does not compile without them. (2) The portal: make/photon/portal/Dockerfile's recipe run in-tree (src/portal/.nvmrc = v22.22.3, so node_version 22), then dist + swagger.json + the swagger-ui bundle are collected into readystack-portal/ and node_modules are deleted (the renderer only removes a top-level node_modules). (3) The registry: goharbor/distribution v2.8.3-harbor.3 (Makefile REGISTRY_SRC_TAG / DISTRIBUTION_SRC) cloned to third_party/distribution; it has its own go.mod (module github.com/docker/distribution, go 1.27.2) and becomes the second multi_module dir. generate-build-timestamp writes the build time into the portal bundle; that happens once, online, and the offline rebuild copies the vendored bundle, so the offline digest is unaffected.",
+      "node_dist": {
+        "version": "22.23.5",
+        "sha256": "c54118104acc524633b5abe106bbf44a53126ec8b4e5fa105cb92b5d7de8a1a1"
+      }
+    },
+    "_lint_note": "lint_apis (spectral) and gen_mocks are upstream CI steps, not build inputs, and are not run.",
+    "source_date_epoch_basis": "release-cut",
+    "commit_epoch": 1794303330
+  },
+  "binaries_from_source": [
+    {
+      "name": "harbor_core",
+      "module_dir": "src",
+      "main_pkg": "./core",
+      "ldflags": "-s -w -X github.com/goharbor/harbor/src/pkg/version.GitCommit=@COMMIT:8@ -X github.com/goharbor/harbor/src/pkg/version.ReleaseVersion=@VERSION@",
+      "out_path": "/harbor/harbor_core",
+      "verify_subcmd": "-h",
+      "_note": "Makefile CORE_LDFLAGS (GITCOMMIT = 8-char short sha, RELEASEVERSION = VERSION file = v2.15.4). `-h` exits 0 at flag.Parse before any config or network (main.go: only the PPROF_ENABLED-gated pprof starts first)."
+    },
+    {
+      "name": "harbor_jobservice",
+      "module_dir": "src",
+      "main_pkg": "./jobservice",
+      "ldflags": "-s -w",
+      "out_path": "/harbor/harbor_jobservice",
+      "verify_subcmd": "-h >/dev/null 2>&1; test -x /harbor_jobservice",
+      "_note": "jobservice loads its configuration from core over REST BEFORE flag.Parse (main.go: cfgLib.DefaultMgr().Load), so `-h` panics without a running core. The verify therefore only proves the binary was produced: a failed go build skips the -h (&&) and test -x then fails the stage."
+    },
+    {
+      "name": "harbor_registryctl",
+      "module_dir": "src",
+      "main_pkg": "./registryctl",
+      "ldflags": "-s -w",
+      "out_path": "/harbor/harbor_registryctl",
+      "verify_subcmd": "-h"
+    },
+    {
+      "name": "registry",
+      "module_dir": "third_party/distribution",
+      "main_pkg": "./cmd/registry",
+      "build_tags": [
+        "include_oss",
+        "include_gcs"
+      ],
+      "ldflags": "-s -w -X github.com/docker/distribution/version.Revision=72e8fdc1ff9021b77e618568a967e4b53689ce32",
+      "out_path": "/usr/local/bin/registry",
+      "verify_subcmd": "--version",
+      "_note": "make/photon/registry/Dockerfile.binary: BUILDTAGS include_oss include_gcs, CGO_ENABLED=0. Revision is the commit of v2.8.3-harbor.3. version.Version is deliberately NOT stamped: scripts/retarget.py tokenizes any `Version=vX.Y` in ldflags into @VERSION_BARE@ (Harbor's version), which would mislabel the registry; it reports its source default v2.8.3+unknown plus this revision."
+    }
+  ],
+  "runtime_packages": [
+    "ca-certificates",
+    "curl",
+    "tzdata",
+    "nginx",
+    "supervisor",
+    "openssl",
+    "apache2-utils"
+  ]
+}

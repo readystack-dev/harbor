@@ -1,0 +1,9 @@
+{
+  "schema": "kitforge.source_tree_hash.v1",
+  "slug": "harbor",
+  "repo": "https://github.com/goharbor/harbor",
+  "ref": "v2.16.0",
+  "commit": "e69b1bfab9c945cdbddf74d04d19200011108af0",
+  "tree_listing_sha256": "0890277b81e054ed217d0e5003b1205e22622cd24812d60ed97ecbcffc82071a",
+  "file_count": 3311
+}

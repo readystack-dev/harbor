@@ -1,0 +1,7 @@
+ca-certificates
+curl
+tzdata
+nginx
+supervisor
+openssl
+apache2-utils

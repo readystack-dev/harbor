@@ -1,0 +1,8 @@
+image_manifest_digest=sha256:b5147d42aaaf6036e8de3cd25960fbee87eab90069c9dbc869c3a16b35592d19
+config_digest=sha256:d1e0122a5a6bd7ff6020c08eb9f85006cf32fd87b0b7ec2c1426aff3b7af023d
+tag=readystack/harbor:v2.16.0-CE-ubuntu24.04-r1
+probe_port=8080
+probe_path=/api/v2.0/ping
+probe_timeout=600
+verify_boot=skip
+verify_boot_reason=this image needs db, redis (not part of this archive); boot it with your own services as the admin handbook describes

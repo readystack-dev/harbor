@@ -1,0 +1,45 @@
+# ReadyStack Harbor: upstream's registry config (make/photon/prepare/templates/registry/config.yml.jinja) with
+# filesystem storage on /data/registry. redis.addr, redis.password and http.secret are set per start through
+# REGISTRY_REDIS_ADDR / REGISTRY_REDIS_PASSWORD / REGISTRY_HTTP_SECRET by harbor-entrypoint.sh.
+version: 0.1
+log:
+  level: info
+  fields:
+    service: registry
+storage:
+  cache:
+    layerinfo: redis
+  filesystem:
+    rootdirectory: /data/registry
+  maintenance:
+    uploadpurging:
+      enabled: true
+      age: 168h
+      interval: 24h
+      dryrun: false
+  delete:
+    enabled: true
+redis:
+  addr: redis:6379
+  readtimeout: 10s
+  writetimeout: 10s
+  dialtimeout: 10s
+  db: 1
+  pool:
+    maxidle: 100
+    maxactive: 500
+    idletimeout: 60s
+http:
+  addr: 127.0.0.1:5000
+  secret: placeholder
+  debug:
+    addr: 127.0.0.1:5001
+auth:
+  htpasswd:
+    realm: harbor-registry-basic-realm
+    path: /data/secret/registry/passwd
+validation:
+  disabled: true
+compatibility:
+  schema1:
+    enabled: true
